@@ -7,17 +7,24 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+
+    private static final int DATABASE_VERSION = 1; // If this is incremented onUpgrade() will be executed
+    private static final String DATABASE_NAME = "Mountain.db"; // The file name of our database
+
+    DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    // This method is executed only if there is not already a database in the file `Mountain.db`
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+        sqLiteDatabase.execSQL(DatabaseTables.SQL_CREATE_TABLE_MOUNTAIN);
     }
 
+    // This method is executed only if the database version has changed, e.g. from 1 to 2
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        sqLiteDatabase.execSQL(DatabaseTables.SQL_DELETE_TABLE_MOUNTAIN);
+        onCreate(sqLiteDatabase);
     }
 }
