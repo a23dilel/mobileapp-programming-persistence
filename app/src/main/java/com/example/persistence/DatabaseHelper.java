@@ -16,9 +16,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     DatabaseHelper(Context context) {
         super(context, "database.db", null, DATABASE_VERSION);
-
-        // rename table name (print out false)
-        //DatabaseTables.TABLE_NAME = databaseFileName;
     }
 
     // This method is executed only if there is not already a database in the file `Mountain.db`
