@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Persistence</string>
+    <string name="hint_id">Mountain ID</string>
+    <string name="hint_name">Mountain Name</string>
+    <string name="hint_values">Mountain Values</string>
+    <string name="write_button_text">Write</string>
+    <string name="read_button_text">Read</string>
 </resources>
