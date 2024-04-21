@@ -2,17 +2,23 @@ package com.example.persistence;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1; // If this is incremented onUpgrade() will be executed
+    // If this is incremented onUpgrade() will be executed
+    private static final int DATABASE_VERSION = 1;
 
-    private DatabaseTables databaseTables;
+    DatabaseHelper(Context context) {
+        super(context, "database.db", null, DATABASE_VERSION);
 
-    DatabaseHelper(Context context, String databaseFileName) {
-        super(context, databaseFileName + ".db", null, DATABASE_VERSION);
+        // rename table name (print out false)
+        //DatabaseTables.TABLE_NAME = databaseFileName;
     }
 
     // This method is executed only if there is not already a database in the file `Mountain.db`
@@ -28,18 +34,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public boolean addData(Data data)
-    {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+    /* add table properties and data an example:
+       TABLE
+       |   ID  |   NAME    |   LOCATION    |
 
+       |   23  |   K2      |   Karakoram     |
+    */
+    public boolean AddData(Data data)
+    {
+        // make SQLiteDatabase WritableDatabase
+        SQLiteDatabase database = this.getWritableDatabase();
+
+        // can add table properties and data
+        ContentValues cv = new ContentValues();
         cv.put(DatabaseTables.COLUMN_ID, data.getID());
         cv.put(DatabaseTables.COLUMN_NAME, data.getName());
+        cv.put(DatabaseTables.COLUMN_LOCATION, data.getLocation());
 
+        // then insert all table properties and data to table name
+        long insertData = database.insert(DatabaseTables.TABLE_NAME, null, cv);
 
-        long insert = database.insert(DatabaseTables.TABLE_NAME, null, cv);
-
-        if (insert != -1)
+        // checking if insertData successful or not.
+        if (insertData != -1)
         {
             return true;
         }
@@ -47,6 +63,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         {
             return false;
         }
+    }
 
+    public List<Data> SelectAllData()
+    {
+        // list of data
+        List<Data> returnListData = new ArrayList<>();
+
+        // grab data from the table database
+        String queryString = "SELECT * FROM " + DatabaseTables.TABLE_NAME;
+
+        // SQLiteDatabase can only read on database
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        // return a cursor for grabbing rows of data (like an array) on columns from database
+        Cursor cursor = database.rawQuery(queryString, null);
+
+        // move cursor to first result and find result data. if cursor find data then read data else don't add anything on the returnListData
+        if (cursor.moveToFirst())
+        {
+            // keep looking through the next line and find cursor result data, Grab data and add in returnListData
+            do {
+                String id = cursor.getString(0);
+                String name = cursor.getString(1);
+                String location = cursor.getString(2);
+
+                Data newData = new Data(id, name, location);
+                returnListData.add(newData);
+            }while (cursor.moveToNext());
+        }
+        else
+        {
+            // don't add anything on the returnListData
+        }
+
+        // close both so that the database is done when looking through data.
+        cursor.close();
+        database.close();
+
+        return returnListData;
     }
 }
