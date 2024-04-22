@@ -5,4 +5,5 @@
     <string name="hint_values">Location</string>
     <string name="write_button_text">Write</string>
     <string name="read_button_text">Read</string>
+    <string name="delete_button_text">Delete Table</string>
 </resources>
