@@ -1,7 +1,7 @@
 package com.example.persistence;
 
 public class DatabaseTables {
-    public static String TABLE_NAME = "DATABASE_TABLE";
+    public static final String TABLE_NAME = "DATABASE_TABLE";
     public static final String COLUMN_ID = "ID";
     public static final String COLUMN_NAME = "NAME";
     public static final String COLUMN_LOCATION = "LOCATION";
