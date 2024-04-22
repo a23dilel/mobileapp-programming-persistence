@@ -59,6 +59,24 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        readButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Data> all = databaseHelper.SelectAllData();
+
+                TextView tvData = findViewById(R.id.textView_data);
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                // print each data item in a new line
+                for (int i = 0; i < all.size(); i++) {
+                    stringBuilder.append(all.get(i)).append("\n");
+                }
+
+                // print all data items on textView
+                tvData.setText(stringBuilder.toString());
+            }
+        });
 
     }
 }
