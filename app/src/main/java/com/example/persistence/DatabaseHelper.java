@@ -31,6 +31,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    public boolean DropTable()
+    {
+        SQLiteDatabase database = this.getWritableDatabase();
+        return database.delete(DatabaseTables.TABLE_NAME, null, null) > 0;
+    }
+
     /* add table properties and data an example:
        TABLE
        |   ID  |   NAME    |   LOCATION    |
