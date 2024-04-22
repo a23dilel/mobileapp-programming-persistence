@@ -31,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    // delete table name which will delete all data from database
     public boolean DropTable()
     {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -68,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    // find data in database for trying to find each data and store the data to returnListData
     public List<Data> SelectAllData()
     {
         // list of data
