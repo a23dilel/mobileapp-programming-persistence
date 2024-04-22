@@ -37,6 +37,28 @@ public class MainActivity extends AppCompatActivity {
 
         databaseHelper = new DatabaseHelper(MainActivity.this);
 
+        writeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // take all data from editText and store all the data on contractor
+                data = new Data(etID.getText().toString(), etName.getText().toString(), etLocation.getText().toString());
+
+                // return if insertData successful or not
+                boolean success = databaseHelper.AddData(data);
+
+                // checking if success for adding a data
+                if (success)
+                {
+                    Toast.makeText(MainActivity.this, "Success for adding a data!", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    String message = "Failed for adding a data, because primary key ID: " + data.getID() + " has already applied?";
+                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 }
