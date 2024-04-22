@@ -70,6 +70,16 @@ public class MainActivity extends AppCompatActivity {
                 // select all data from database and grab these to store i a variable
                 List<Data> all = databaseHelper.SelectAllData();
 
+                // if data is empty then print massage "Read data is empty" otherwise "Read data was successful!"
+                if(all.isEmpty())
+                {
+                    Toast.makeText(MainActivity.this, "Read data is empty", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(MainActivity.this, "Read data was successful!", Toast.LENGTH_SHORT).show();
+                }
+
                 StringBuilder stringBuilder = new StringBuilder();
 
                 // print each data item in a new line
