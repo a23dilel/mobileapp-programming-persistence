@@ -1,39 +1,113 @@
-
 # Rapport
 
-**Skriv din rapport här!**
-
-_Du kan ta bort all text som finns sedan tidigare_.
-
-## Följande grundsyn gäller dugga-svar:
-
-- Ett kortfattat svar är att föredra. Svar som är längre än en sida text (skärmdumpar och programkod exkluderat) är onödigt långt.
-- Svaret skall ha minst en snutt programkod.
-- Svaret skall inkludera en kort övergripande förklarande text som redogör för vad respektive snutt programkod gör eller som svarar på annan teorifråga.
-- Svaret skall ha minst en skärmdump. Skärmdumpar skall illustrera exekvering av relevant programkod. Eventuell text i skärmdumpar måste vara läsbar.
-- I de fall detta efterfrågas, dela upp delar av ditt svar i för- och nackdelar. Dina för- respektive nackdelar skall vara i form av punktlistor med kortare stycken (3-4 meningar).
-
-Programkod ska se ut som exemplet nedan. Koden måste vara korrekt indenterad då den blir lättare att läsa vilket gör det lättare att hitta syntaktiska fel.
+**Write, Read and delete data for the database**
 
 ```
-function errorCallback(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            // Geolocation API stöds inte, gör något
-            break;
-        case error.POSITION_UNAVAILABLE:
-            // Misslyckat positionsanrop, gör något
-            break;
-        case error.UNKNOWN_ERROR:
-            // Okänt fel, gör något
-            break;
+...
+// Grab data from editTexts and add these data to the database
+writeButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+
+        // take all data from editText and store all the data on contractor
+        data = new Data(etID.getText().toString(), etName.getText().toString(), etLocation.getText().toString());
+
+        // return if insertData successful or not
+        boolean success = databaseHelper.AddData(data);
+
+        // checking if success for adding a data
+        if (success)
+        {
+            Toast.makeText(MainActivity.this, "Success for adding a data!", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            String message = "Failed for adding a data, because primary key ID: " + data.getID() + " has already applied?";
+            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+        }
     }
-}
+});
+...
 ```
+När "writeButton" har klickats kommer den att hämta data från editTexts (om det finns värden i editTexts) 
+och lagra dessa data i ett data. Därefter används metoden "AddData()" från "databaseHelper" 
+för att lägga till all data i databasen och returnera sant eller falskt beroende på beränka resultat. 
+Det finns en if-sats som kollar om insättningen var lyckad eller inte och visar ett lämpligt meddelande.
 
-Bilder läggs i samma mapp som markdown-filen.
+```
+...
+readButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
 
-![](android.png)
+        // select all data from database and grab these to store i a variable
+        List<Data> all = databaseHelper.SelectAllData();
+
+        // if data is empty then print massage "Read data is empty" otherwise "Read data was successful!"
+        if(all.isEmpty())
+        {
+            Toast.makeText(MainActivity.this, "Read data is empty", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(MainActivity.this, "Read data was successful!", Toast.LENGTH_SHORT).show();
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        // print each data item in a new line
+        for (int i = 0; i < all.size(); i++) {
+            stringBuilder.append(all.get(i)).append("\n");
+        }
+
+        // print all data items on textView
+        tvData.setText(stringBuilder.toString());
+    }
+});
+...
+```
+När "readButton" klickas på kommer alla data hämtas från databasen och lagra i en variabel.
+Därefter kollar om datan är tom. Om den är tom, kommer skriva ut en meddelande "Read data is empty" annars skrivs "Read data was successful!" ut.
+Sedan läsa hela data från databasen och skrivs varje dataobjekt ut på en ny rad i en textview.
+
+```
+...
+deleteButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+
+        // return true if data is deleted
+        boolean deleteSuccess = databaseHelper.DropTable();
+
+        // if delete data was successful then print "Table is deleted" otherwise "Cannot delete table, because there is no table"
+        if (deleteSuccess)
+        {
+            Toast.makeText(MainActivity.this, "Table is deleted", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(MainActivity.this, "Cannot delete table, because there is no table", Toast.LENGTH_SHORT).show();
+        }
+    }
+});
+...
+```
+När "deleteButton" klickas på returneras true om datan har raderats. 
+Om denna lyckades, skrivs ut meddelande "Table is deleted" annars skrivs "Cannot delete table, because there is no table" ut.
+Detta gör att om använderen vill rensa databasen kan de använda delete-funktionen för att ta bort hela tabellen och all data.
+
+![Screenshot1.png](Screenshot1.png)
+Där användaren kan skriva in ID, namn och plats. När användaren klickar på "write"-knappen får de ett meddelnade om att datan har lyckats.
+Om datan inte lyckas läggs till kan hända att ID redan används. I så fall behöver användren välja ett annat ID-nummer.
+
+![Screenshot2.png](Screenshot2.png)
+Där användaren måste klicka på "write"-knappen för att lägga till data. Sedan behöver det att användaren klickar på "read"-knappen för att visa datan på views.
+Om användaren försöker klicka på "read"-knappen utan att först klicka på "write"-knappen visas ett meddelande om att datan är tom.
+
+![Screenshot3.png](Screenshot3.png)
+Det finns en "Delete Table"-knapp för att ta bort all data. När användaren klickar på knappen visas ett meddelande "Table is deleted".
+Om den inte lyckas kan hända att tabellens data redan har rederat eller att det inte finns någon data från början.
+Observera att data fortfarende kan synas på views tills användaren klickar på "read"-knappen för att uppdatera views.
 
 Läs gärna:
 
