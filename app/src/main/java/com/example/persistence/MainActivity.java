@@ -99,10 +99,14 @@ public class MainActivity extends AppCompatActivity {
                 // return true if data is deleted
                 boolean deleteSuccess = databaseHelper.DropTable();
 
-                // if delete data was successful
+                // if delete data was successful then print "Table is deleted" otherwise "Cannot delete table, because there is no table"
                 if (deleteSuccess)
                 {
                     Toast.makeText(MainActivity.this, "Table is deleted", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(MainActivity.this, "Cannot delete table, because there is no table", Toast.LENGTH_SHORT).show();
                 }
             }
         });
